@@ -1,46 +1,47 @@
 package c4.ext;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.List;
-import c4.model.Board.Place;
 import c4.base.BoardPanel;
-import c4.base.C4Dialog;
-import c4.base.ColorPlayer;
-import org.aspectj.lang.annotation.Around;
+import c4.base.*;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.*;
 
 public privileged aspect EndGame{
+    //int counter=0;
+    ColorPlayer Blue = new ColorPlayer("Blue", Color.BLUE );
+    ColorPlayer Red = new ColorPlayer("Red", Color.RED );
+    pointcut test(C4Dialog dialog): this(dialog) && execution(void C4Dialog.makeMove(int));
 
-    pointcut game_over(C4Dialog c4_dialog): //telling it where to go i believe?
-             this(c4_dialog) && (call(void C4Dialog.makeMove(int)));
-                    //|| (call(int Board.dropInSlot(int, Player)));
+    void around(C4Dialog dialog, int n): args(n) && test(dialog){
+        if (!dialog.board.isGameOver()) {
+            dialog.board.dropInSlot(n,dialog.player);
+            if (dialog.board.isFull()) {
+                dialog.showMessage("tie" + dialog.player.name());
 
-
-    //pointcut gameOver(C4Dialog c4Dialogg):
-      //      this(c4Dialogg) && call(void board.dropInSlot(int));
-
-    //------------------------------------------------------------------------////
-     void around(C4Dialog c4_dialog, int n): args(n) && game_over(c4_dialog){ //telling it what to do
-        //PLAYER WON GAME
-         String x = "hello";
-        c4_dialog.makeMove(n);
-         c4_dialog.showMessage("Game is over, winner is ssssssss:");
-
-         if(c4_dialog.board.isWonBy(c4_dialog.player)){
-            c4_dialog.showMessage("Game is over, winner is :"+ c4_dialog.player.name() );
-            AddSound.playAudio("click.wav");
-        }
-        //GAME IS A DRAW
-        else {
-            if(c4_dialog.board.isFull()){
-                c4_dialog.showMessage("Tie Game!");
-                AddSound.playAudio("click.wav");
+            } else if (dialog.board.isWonBy(dialog.player)) {
+                dialog.showMessage("won" + dialog.player.name());
             }
         }
+        dialog.repaint();
+        if (dialog.player.name().equals("Blue")) {
+            dialog.player = Red;
+            dialog.showMessage("Red turn");
+        }
+        //if player is red change to blue
+        else if (dialog.player.name().equals("Red")) {
+            dialog.player = Blue;
+            dialog.showMessage("Blue turn");
+        }
+        /*if(counter%2==0){
+            dialog.player = Red;
+            dialog.showMessage("Red turn");
+        }
+        if(counter%2==1){
+            dialog.player= Blue;
+            dialog.showMessage("Blue turn");
+        }
+        counter++;*/
 
     }
+
 
 }
