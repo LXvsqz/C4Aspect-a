@@ -21,14 +21,13 @@ public privileged aspect AddSound {
         }else {
             playAudio("click.wav");
         }
-       // if(c4Dialog.board.isWonBy(c4Dialog.player)){
-         //   playAudio("clapping.wav");
-        //}
+
 
     }
     after(C4Dialog c4Dialog) : execution(* C4Dialog.makeMove(int)) && this(c4Dialog){
         if(c4Dialog.board.isWonBy(c4Dialog.player)){
             playAudio("clapping.wav");
+            c4Dialog.showMessage(c4Dialog.player.name() + " won");
 
         }
     }

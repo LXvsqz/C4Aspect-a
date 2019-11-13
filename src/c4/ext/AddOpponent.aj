@@ -15,7 +15,7 @@ public privileged aspect AddOpponent{
             call(BoardPanel.new(..)){ c4Dialog.name = panel;}
 
     //The advice is declared checking for makeMove execution
-    after(C4Dialog c4Dialog): this(c4Dialog) && execution(void C4Dialog.makeMove(..))
+    before(C4Dialog c4Dialog): this(c4Dialog) && execution(void C4Dialog.makeMove(..))
             {
                 //if player is blue change to red
 
