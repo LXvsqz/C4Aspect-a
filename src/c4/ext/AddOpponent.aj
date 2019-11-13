@@ -1,33 +1,31 @@
 package c4.ext;
-
-import java.awt.Color;
-import c4.base.ColorPlayer;
 import c4.base.C4Dialog;
 import c4.base.BoardPanel;
+import java.awt.Color;
+import c4.base.ColorPlayer;
 
-public privileged aspect AddOpponent{
+public privileged aspect AddOpponent {
 
     private BoardPanel C4Dialog.name;
-    ColorPlayer Blue = new ColorPlayer("Blue", Color.BLUE );
-    ColorPlayer Red = new ColorPlayer("Red", Color.RED );
 
-    after(C4Dialog c4Dialog) returning(BoardPanel panel): this(c4Dialog) &&
-            call(BoardPanel.new(..)){ c4Dialog.name = panel;}
+    ColorPlayer Blue = new ColorPlayer("Blue", Color.BLUE); //predefined human players created
+    ColorPlayer Red = new ColorPlayer("Red", Color.RED);
 
-    //The advice is declared checking for makeMove execution
-    before(C4Dialog c4Dialog): this(c4Dialog) && execution(void C4Dialog.makeMove(..))
+    after(C4Dialog dialog) returning(BoardPanel panel): this(c4Dialog) && call(BoardPanel.new(..)){
+        dialog.name = panel;
+    }
+
+    after(C4Dialog dialog): this(dialog) && execution(void C4Dialog.makeMove(..))
             {
-                //if player is blue change to red
-
-                if (c4Dialog.player.name().equals("Blue")) {
-                    c4Dialog.player = Red;
-                    c4Dialog.showMessage("red turn");
+                //if player is blue change to red simultaneously
+                if (dialog.player.name().equals("Blue")) {
+                    dialog.player = Red;
                 }
-                //if player is red change to blue
-                else if (c4Dialog.player.name().equals("Red")) {
-                    c4Dialog.player = Blue;
-                    c4Dialog.showMessage("Blue turn");
+                //if player is red change to blue simultaneously
+                else if (dialog.player.name().equals("Red")) {
+                    dialog.player = Blue;
                 }
-                c4Dialog.name.setDropColor(c4Dialog.player.color());
+                dialog.showMessage(dialog.player.name() + "Turn"); //display message for unique player tyurn
+                dialog.name.setDropColor(dialog.player.color()); //set color
             }
 }

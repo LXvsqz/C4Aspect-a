@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="C4Aspect:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/C4Aspect_jar</output-path>
+    <root id="archive" name="C4Aspect.jar">
+      <element id="module-output" name="C4Aspect" />
+      <element id="extracted-dir" path="C:/aspectj1.9/lib/aspectjtools.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

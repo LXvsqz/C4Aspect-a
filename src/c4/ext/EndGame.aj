@@ -12,31 +12,23 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public privileged aspect EndGame {
-    void around(C4Dialog dialog): this(dialog)
-            && execution(void C4Dialog.newButtonClicked(..)){
+    void around(C4Dialog dialog): this(dialog) && execution(void C4Dialog.newButtonClicked(..)){
 
-        if(dialog.board.isGameOver() ) {
+        if(dialog.board.isGameOver() ) { //clear the board
             dialog.startNewGame();
-        }
-
-        else {
+        } else { //keep going
             proceed(dialog);
         }
-
     }
-    after(C4Dialog c4Dialog, Player player) : this(c4Dialog) && args(place)&& execution(void c4Dialog.makeMove(Place)){
-        if(!c4Dialog.board.isGameOver()){
+    after(C4Dialog dialog, Player player) : this(dialog) && args(place)&& execution(void c4Dialog.makeMove(Place)){
+        if(!dialog.board.isGameOver()){ //continue while game is not over
             proceed();
-        }else if(c4Dialog.board.isWonBy(player)){
-            c4Dialog.showMessage(player.name + " won");
-            c4Dialog.repaint();
+        }else if(dialog.board.isWonBy(player)){ //display player that wins
+            dialog.showMessage(player.name + " Won The Game");
+            dialog.repaint(); //display
         }else{
-            c4Dialog.showMessage("Its a tie ");
-            c4Dialog.repaint();
-
+            dialog.showMessage("TIE GAME. TRY AGAIN"); //need to fix new button in this instance
+            dialog.repaint();
         }
-
     }
-
-
 }
