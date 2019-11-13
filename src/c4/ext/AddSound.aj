@@ -15,8 +15,21 @@ public privileged aspect AddSound {
     private static final String SOUND_DIR = "/sound/";
 
     //plays sound based on current player's turn
-    before(C4Dialog c4Dialog) : execution(* C4Dialog.makeMove(int)) && this(c4Dialog) {
-        playAudio("click.wav");
+    before(C4Dialog c4Dialog) : execution(* C4Dialog.makeMove(int)) && this(c4Dialog){
+        if (c4Dialog.player.name().equals("Blue")) {
+            playAudio("bloop_x.wav");
+        }else {
+            playAudio("click.wav");
+        }
+       // if(c4Dialog.board.isWonBy(c4Dialog.player)){
+         //   playAudio("clapping.wav");
+        //}
+
+    }
+    after(C4Dialog c4Dialog) : execution(* C4Dialog.makeMove(int)) && this(c4Dialog){
+        if(c4Dialog.board.isWonBy(c4Dialog.player)){
+            playAudio("clapping.wav");
+        }
     }
 
     public static void playAudio(String filename) {
