@@ -31,4 +31,16 @@ public privileged aspect EndGame {
         }
 
     }
+    void around(C4Dialog dialog): target(dialog)
+            && execution(void C4Dialog.playButtonClicked(ActionEvent)){
+
+        if(dialog.board.isGameOver()) {
+            dialog.startNewGame();
+        }
+
+        else {
+            proceed(dialog);
+        }
+
+    }
 }
