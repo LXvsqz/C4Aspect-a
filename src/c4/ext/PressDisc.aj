@@ -29,7 +29,7 @@ public privileged aspect PressDisc {
         panel.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseReleased(MouseEvent e){
-                //Verify game is still active
+                //check if game is still active
                 if(!(panel.board.isGameOver())){
                     Graphics g = panel.getGraphics();
                     int matrix_position = panel.locateSlot(e.getX(), e.getY());
