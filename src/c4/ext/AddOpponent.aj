@@ -18,9 +18,10 @@ public privileged aspect AddOpponent{
     after(C4Dialog c4Dialog): this(c4Dialog) && execution(void C4Dialog.makeMove(..))
             {
                 //if player is blue change to red
+
                 if (c4Dialog.player.name().equals("Blue")) {
                     c4Dialog.player = Red;
-                    c4Dialog.showMessage("Red turn");
+                    c4Dialog.showMessage("red turn");
                 }
                 //if player is red change to blue
                 else if (c4Dialog.player.name().equals("Red")) {
